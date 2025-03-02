@@ -1,0 +1,1 @@
+GET https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=1
