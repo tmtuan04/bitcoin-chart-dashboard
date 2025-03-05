@@ -1,24 +1,112 @@
 import axios from "axios";
-import { ICandleStickData } from "./definitions";
+import { ICandleStickData, IVolumeData, IBitcoinPrice } from "./definitions";
+import { z } from "zod";
+
+const candleSchema = z.object({
+  time: z.number(),
+  open: z.coerce.number(),
+  high: z.coerce.number(),
+  low: z.coerce.number(),
+  close: z.coerce.number(),
+});
 
 export const fetchBitcoinCandles = async (
-  symbol: string = "BTCUSDT",
-  interval: string = "1m",
-  limit: number = 10
+  interval: string,
+  limit: number = 100
 ): Promise<ICandleStickData[]> => {
   try {
     const response = await axios.get(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+      `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`
     );
-    return response.data.map((candle: any[]) => ({
-        time: candle[0],
+    return response.data.map((candle: any[]) => {
+      // Parse and validate data using Zod
+      return candleSchema.parse({
+        time: candle[0] / 1000,
         open: candle[1],
         high: candle[2],
         low: candle[3],
         close: candle[4],
-    }))
+      });
+    });
   } catch (error) {
-    console.log("Error fetching Bitcoin data:", error);
+    console.error("Error fetching Bitcoin data:", error);
     return [];
+  }
+};
+
+const volumeSchema = z.object({
+  time: z.number(),
+  value: z.coerce.number(),
+  color: z.string(),
+});
+
+export const fetchBitcoinVolume = async (
+  interval: string,
+  limit: number = 100,
+): Promise<IVolumeData[]> => {
+  try {
+    const response = await axios.get(
+      `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`
+    );
+    return response.data.map((volume: any[]) => {
+      // Parse and validate data using Zod
+      return volumeSchema.parse({
+        time: volume[0] / 1000,
+        value: volume[5],
+        color: volume[4] > volume[1] ? "#26a69a" : "#ef5350",
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching Bitcoin data:", error);
+    return [];
+  }
+};
+
+const priceSchema = z.object({
+  time: z.number(),
+  price: z.coerce.number(),
+});
+
+export const fetchCurrentPrice = async (
+  symbol: string = "BTCUSDT",
+  interval: string = "1m",
+  limit: number = 1
+): Promise<IBitcoinPrice | null> => {
+  try {
+    const response = await axios.get(
+      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+    );
+
+    const latestCandle = response.data[0];
+    const priceData = {
+      time: latestCandle[0],
+      price: latestCandle[4],
+    };
+    return priceSchema.parse(priceData);
+  } catch (error) {
+    console.error("Error fetching Bitcoin current price", error);
+    return null;
+  }
+};
+
+export const fetchPriceOneMinuteAgo = async (
+  symbol: string = "BTCUSDT",
+  interval: string = "1m",
+  limit: number = 2
+): Promise<IBitcoinPrice | null> => {
+  try {
+    const response = await axios.get(
+      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+    );
+
+    const oneMinuteAgoCandle = response.data[1];
+    const priceData = {
+      time: oneMinuteAgoCandle[0],
+      price: oneMinuteAgoCandle[4],
+    };
+    return priceSchema.parse(priceData);
+  } catch (error) {
+    console.error("Error fetching Bitcoin current price", error);
+    return null;
   }
 };

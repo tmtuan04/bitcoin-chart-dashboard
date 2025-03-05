@@ -1,4 +1,5 @@
-// types/bitcoin.ts
+// import { Time } from "lightweight-charts";
+
 export interface ICandleStickData {
   time: number; // Unix timestamp in milliseconds
   open: number;
@@ -10,6 +11,7 @@ export interface ICandleStickData {
 export interface IVolumeData {
   time: number; // Unix timestamp in milliseconds
   value: number; // Volume
+  color?: string;
 }
 
 export interface IBitcoinPrice {

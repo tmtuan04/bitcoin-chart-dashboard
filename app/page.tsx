@@ -1,11 +1,13 @@
 import NavBar from "./ui/NavBar/NavBar";
-import CandlestickChart from "@/app/ui/Chart/CandlestickChart";
+import CandlestickChart from "./ui/Chart/CandlestickChart";
 
-export default function Page() {
+export default async function Page() {
   return (
     <>
       <NavBar />
-      <CandlestickChart />
+      <div className="mt-20">
+        <CandlestickChart />
+      </div>
     </>
   );
 }
