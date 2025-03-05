@@ -5,11 +5,11 @@ This is a Next.js project that displays Bitcoin data using two types of charts:
 - **Volume Chart**
 
 ## 🎯 Features
-✅ Supports **Dark & Light Theme** 🌙☀️
-✅ Volume chart does not exceed **30% of the total chart height** 📊
-✅ Enables **dragging left** to view older data ⬅️
-✅ Supports **multiple timeframes**: `1m`, `5m`, `30m`, `1h`, `4h`, `1d`, `3d`. `1w`. ⏳
-✅ Button to fetch **current Bitcoin price** and **price from 1 minute ago** 📈
+- Supports **Dark & Light Theme** 🌙☀️
+- Volume chart does not exceed **30% of the total chart height** 📊
+- Enables **dragging left** to view older data ⬅️
+- Supports **multiple timeframes**: `1m`, `5m`, `30m`, `1h`, `4h`, `1d`, `3d`. `1w`. ⏳
+- Button to fetch **current Bitcoin price** and **price from 1 minute ago** 📈
 
 ## 📌 Technologies Used
 - **Next.js** & **TypeScript** for better performance and maintainability.
