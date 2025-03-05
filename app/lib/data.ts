@@ -18,7 +18,7 @@ export const fetchBitcoinCandles = async (
     const response = await axios.get(
       `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`
     );
-    return response.data.map((candle: any[]) => {
+    return response.data.map((candle: number[]) => {
       // Parse and validate data using Zod
       return candleSchema.parse({
         time: candle[0] / 1000,
@@ -48,7 +48,7 @@ export const fetchBitcoinVolume = async (
     const response = await axios.get(
       `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&limit=${limit}`
     );
-    return response.data.map((volume: any[]) => {
+    return response.data.map((volume: number[]) => {
       // Parse and validate data using Zod
       return volumeSchema.parse({
         time: volume[0] / 1000,

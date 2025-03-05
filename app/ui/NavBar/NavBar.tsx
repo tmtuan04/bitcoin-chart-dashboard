@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/components/ui/toggle-mode";
-import { ChartArea, Settings } from "lucide-react";
+import { ChartArea } from "lucide-react";
 
 export default function NavBar() {
   return (

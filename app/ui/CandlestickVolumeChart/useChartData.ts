@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { ISeriesApi } from "lightweight-charts";
+import { ISeriesApi, IChartApi, CandlestickData, HistogramData, UTCTimestamp } from "lightweight-charts";
 import { fetchBitcoinCandles, fetchBitcoinVolume } from "@/app/lib/data";
 
 interface UseChartDataProps {
   candlestickSeries: ISeriesApi<"Candlestick"> | null;
   volumeSeries: ISeriesApi<"Histogram"> | null;
   interval: string;
-  chart: any; // Thay bằng type cụ thể nếu cần
+  chart: IChartApi | null;
 }
 
 export const useChartData = ({ candlestickSeries, volumeSeries, interval, chart }: UseChartDataProps) => {
@@ -17,23 +17,22 @@ export const useChartData = ({ candlestickSeries, volumeSeries, interval, chart 
         const candles = await fetchBitcoinCandles(interval);
         const volumes = await fetchBitcoinVolume(interval);
 
-        candlestickSeries.setData(
-          candles.map((candle: any) => ({
-            time: candle.time,
-            open: candle.open,
-            high: candle.high,
-            low: candle.low,
-            close: candle.close,
-          }))
-        );
+        const formattedCandles: CandlestickData[] = candles.map((candle) => ({
+          time: candle.time as UTCTimestamp, // Ép kiểu về UTCTimestamp
+          open: candle.open,
+          high: candle.high,
+          low: candle.low,
+          close: candle.close,
+        }));
 
-        volumeSeries.setData(
-          volumes.map((volume: any) => ({
-            time: volume.time,
-            value: volume.value,
-            color: volume.color,
-          }))
-        );
+        const formattedVolumes: HistogramData[] = volumes.map((volume) => ({
+          time: volume.time as UTCTimestamp, // Ép kiểu về UTCTimestamp
+          value: volume.value,
+          color: volume.color,
+        }));
+
+        candlestickSeries.setData(formattedCandles);
+        volumeSeries.setData(formattedVolumes);
 
         if (candles.length > 0) {
           chart?.timeScale().fitContent();

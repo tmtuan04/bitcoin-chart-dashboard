@@ -25,7 +25,7 @@ const PriceDisplay: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between p-2 gap-2 border border-gray-600 rounded w-full md:w-auto">
+    <div className="flex flex-col sm:flex-row items-center justify-between p-2 gap-3 border border-gray-600 rounded w-full md:w-auto">
       <Button onClick={getPrices} className="w-full sm:w-auto">
         Get Prices
       </Button>
