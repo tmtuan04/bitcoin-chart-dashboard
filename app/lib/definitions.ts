@@ -1,5 +1,3 @@
-// import { Time } from "lightweight-charts";
-
 export interface ICandleStickData {
   time: number; // Unix timestamp in milliseconds
   open: number;

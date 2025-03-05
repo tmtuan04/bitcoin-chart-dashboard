@@ -47,7 +47,7 @@ const CandlestickVolumeChart: React.FC = () => {
     const currentTheme = getCurrentTheme();
     const chartInstance = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
-      height: 450,
+      height: 550,
       layout: {
         backgroundColor: currentTheme === "light" ? "#ffffff" : "#1e222d",
         textColor: currentTheme === "light" ? "#000000" : "#ffffff",
@@ -82,7 +82,7 @@ const CandlestickVolumeChart: React.FC = () => {
     const volSeries = chartInstance.addHistogramSeries({
       priceFormat: { type: "volume" },
       priceScaleId: "",
-      scaleMargins: { top: 0.8, bottom: 0 },
+      scaleMargins: { top: 0.75, bottom: 0 },
     });
 
     setChart(chartInstance);
@@ -115,8 +115,12 @@ const CandlestickVolumeChart: React.FC = () => {
           textColor: currentTheme === "light" ? "#000000" : "#ffffff",
         },
         grid: {
-          vertLines: { color: currentTheme === "light" ? "#e0e0e0" : "#2a2e39" },
-          horzLines: { color: currentTheme === "light" ? "#e0e0e0" : "#2a2e39" },
+          vertLines: {
+            color: currentTheme === "light" ? "#e0e0e0" : "#2a2e39",
+          },
+          horzLines: {
+            color: currentTheme === "light" ? "#e0e0e0" : "#2a2e39",
+          },
         },
       });
     };
@@ -175,43 +179,37 @@ const CandlestickVolumeChart: React.FC = () => {
     fetchDataAndDraw();
   }, [interval, candlestickSeries, volumeSeries, chart]);
 
-  // Xử lý thay đổi theme từ nút trong component
-  const handleThemeChange = () => {
-    const newTheme = getCurrentTheme() === "light" ? "dark" : "light";
-    localStorage.setItem("theme", newTheme);
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex justify-between p-2 gap-4 border border-gray-600 rounded items-center">
-        <Button onClick={() => getPrices()}>Get Prices</Button>
-        <p className="font-bold">Current Price: {currPrice} $</p>
-        <p className="font-bold">Price 1m Ago: {price1mAgo} $</p>
-      </div>
-      <div className="flex items-center gap-3">
-        <p className="text-xl font-bold">Time Frames:</p>
-        {["1m", "5m", "30m", "1h", "4h", "1d", "3d", "1w"].map((t) => (
-          <Button
-            key={t}
-            onClick={() => setInterval(t)}
-            className={`hover:bg-blue-600 hover:text-white ${
-              interval === t
-                ? "bg-blue-600 text-white shadow-lg border scale-105"
-                : ""
-            }`}
-          >
-            {t}
+    <div className="flex flex-col items-center gap-4 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
+        <div className="flex flex-col sm:flex-row items-center justify-between p-2 gap-2 border border-gray-600 rounded w-full md:w-auto">
+          <Button onClick={() => getPrices()} className="w-full sm:w-auto">
+            Get Prices
           </Button>
-        ))}
+          <p className="font-bold text-center sm:text-left">Current Price: {currPrice}$</p>
+          <p className="font-bold text-center sm:text-left">Price 1m Ago: {price1mAgo}$</p>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 w-full md:w-auto">
+          <div className="flex flex-wrap justify-center gap-2">
+            {["1m", "5m", "30m", "1h", "4h", "1d", "3d", "1w"].map((t) => (
+              <Button
+                key={t}
+                onClick={() => setInterval(t)}
+                className={`hover:bg-blue-600 hover:text-white ${
+                  interval === t
+                    ? "bg-blue-600 text-white shadow-lg border scale-105"
+                    : ""
+                }`}
+              >
+                {t}
+              </Button>
+            ))}
+          </div>
+        </div>
       </div>
       <div
         ref={chartContainerRef}
-        className="w-full h-[600px] border border-gray-300 dark:border-gray-700 rounded"
+        className="w-full"
       />
     </div>
   );
