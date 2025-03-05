@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bitcoin Chart",
+  title: "Bitcoin Dashboard",
   description: 'Bitcoin Candlestick and Volume Chart in Realtime',
 }
 

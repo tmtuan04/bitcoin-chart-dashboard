@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/toggle-mode";
 import { ChartArea, Settings } from "lucide-react";
 
@@ -12,7 +11,6 @@ export default function NavBar() {
             <h1 className="text-xl font-bold">TnBinance</h1>
           </div>
           <div className="flex gap-4">
-            <Button >Settings<Settings className="size-4"/></Button>
             <ModeToggle />
           </div>
         </div>

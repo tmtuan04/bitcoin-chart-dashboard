@@ -13,8 +13,3 @@ export interface IVolumeData {
   value: number; // Volume
   color?: string;
 }
-
-export interface IBitcoinPrice {
-  price: number;
-  time: number;
-}

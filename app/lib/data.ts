@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ICandleStickData, IVolumeData, IBitcoinPrice } from "./definitions";
+import { ICandleStickData, IVolumeData } from "./definitions";
 import { z } from "zod";
 
 const candleSchema = z.object({
@@ -42,7 +42,7 @@ const volumeSchema = z.object({
 
 export const fetchBitcoinVolume = async (
   interval: string,
-  limit: number = 100,
+  limit: number = 100
 ): Promise<IVolumeData[]> => {
   try {
     const response = await axios.get(
@@ -63,25 +63,32 @@ export const fetchBitcoinVolume = async (
 };
 
 const priceSchema = z.object({
-  time: z.number(),
   price: z.coerce.number(),
 });
 
-export const fetchCurrentPrice = async (
-  symbol: string = "BTCUSDT",
-  interval: string = "1m",
-  limit: number = 1
-): Promise<IBitcoinPrice | null> => {
+export const fetchCurrentPrice = async () => {
   try {
     const response = await axios.get(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
+      `https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT`
     );
+    return priceSchema.parse(response.data);
+  } catch (error) {
+    console.error("Error fetching Bitcoin current price", error);
+    return null;
+  }
+};
 
-    const latestCandle = response.data[0];
+export const fetchPriceOneMinuteAgo = async () => {
+  try {
+    const oneMinuteAgo = Math.floor((Date.now() - 60 * 1000) / 1000);
+    const response = await axios.get(
+      `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&startTime=${oneMinuteAgo * 1000}&limit=1`
+    );
+    
     const priceData = {
-      time: latestCandle[0],
-      price: latestCandle[4],
-    };
+      price: response.data[0][4]
+    }
+
     return priceSchema.parse(priceData);
   } catch (error) {
     console.error("Error fetching Bitcoin current price", error);
@@ -89,24 +96,3 @@ export const fetchCurrentPrice = async (
   }
 };
 
-export const fetchPriceOneMinuteAgo = async (
-  symbol: string = "BTCUSDT",
-  interval: string = "1m",
-  limit: number = 2
-): Promise<IBitcoinPrice | null> => {
-  try {
-    const response = await axios.get(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
-    );
-
-    const oneMinuteAgoCandle = response.data[1];
-    const priceData = {
-      time: oneMinuteAgoCandle[0],
-      price: oneMinuteAgoCandle[4],
-    };
-    return priceSchema.parse(priceData);
-  } catch (error) {
-    console.error("Error fetching Bitcoin current price", error);
-    return null;
-  }
-};
