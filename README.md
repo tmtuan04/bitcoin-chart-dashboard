@@ -13,6 +13,8 @@ This is a Next.js project that displays Bitcoin data using two types of charts:
 
 ## 📌 Technologies Used
 - **Next.js** & **TypeScript** for better performance and maintainability.
+- **Tailwind CSS** for utility-first styling.
+- **shadcn/ui** for modern and accessible UI components.
 - **Lightweight Charts** for rendering the charts.
 - **Binance API** for fetching real-time Bitcoin data.
 
